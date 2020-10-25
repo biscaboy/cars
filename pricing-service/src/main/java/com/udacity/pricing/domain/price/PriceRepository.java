@@ -1,8 +1,9 @@
 package com.udacity.pricing.domain.price;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
-@Repository
-public class PriceRepository {
+public interface PriceRepository extends CrudRepository<Price, Long> {
 
+    Price findByVehicleId(@Param("vehicleId") Long vehicleId);
 }
