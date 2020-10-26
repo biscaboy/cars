@@ -239,18 +239,4 @@ public class PricingServiceApplicationTests {
 				.andExpect(jsonPath("errors.[0].code").value("vehicle_id.not.unique"));
 	}
 
-	@Autowired
-	String currencyCodes;
-
-	@Test
-	@DisplayName("Read currency code configuration file.")
-	public void testReadCurrencyCodes() throws IOException, FileNotFoundException {
-		FileInputStream fis = new FileInputStream("src/main/resources/currencies.properties");
-		Properties prop = new Properties();
-		prop.load(fis);
-		fis.close();
-	    String codesFromFile = prop.getProperty("currencies");
-		Assertions.assertNotNull(currencyCodes);
-		Assertions.assertEquals(codesFromFile, currencyCodes);
-	}
 }
