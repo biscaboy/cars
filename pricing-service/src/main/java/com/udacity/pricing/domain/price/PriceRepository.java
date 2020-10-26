@@ -5,5 +5,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface PriceRepository extends CrudRepository<Price, Long> {
 
-    Price findByVehicleId(@Param("vehicleId") Long vehicleId);
+    Price findByVehicleId(@Param("vehicle_id") Long vehicleId);
 }

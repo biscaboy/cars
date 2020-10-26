@@ -2,6 +2,11 @@ package com.udacity.pricing;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,17 +16,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+// @TODO add tests for error handling
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public class PricingServiceApplicationTests {
@@ -31,17 +40,6 @@ public class PricingServiceApplicationTests {
 
 	@Autowired
 	private MockMvc mockMvc;
-
-//	@Test
-//	@DisplayName("The pricing microservice is running.")
-//	public void testIsRunning() throws Exception {
-//
-//		mockMvc.perform(get("/"))
-//				.andExpect(status().isOk())
-//				.andExpect(content().contentType("application/hal+json;charset=UTF-8"))
-//				.andExpect(jsonPath("_links.prices.href").value("http://localhost/prices"))
-//				.andExpect(jsonPath("_links.profile.href").value("http://localhost/profile"));
-//	}
 
 	@Test
 	@DisplayName("Create a price (via POST).")
@@ -56,7 +54,7 @@ public class PricingServiceApplicationTests {
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content("{\"currency\":\"" + currency +
 						"\", \"price\":\"" + price +
-						"\", \"vehicleId\":\"" + vehicleId +
+						"\", \"vehicle_id\":\"" + vehicleId +
 						"\"}");
 
 		String content = mockMvc.perform(post)
@@ -67,10 +65,10 @@ public class PricingServiceApplicationTests {
 
 		JSONObject obj = new JSONObject(content);
 		Assertions.assertAll("Create Price",
-			() -> Assertions.assertNotNull(obj.get("priceId")),
+			() -> Assertions.assertNotNull(obj.get("price_id")),
 			() -> Assertions.assertEquals(currency, obj.get("currency")),
 			() -> Assertions.assertEquals(price, obj.get("price")),
-			() -> Assertions.assertEquals(vehicleId, obj.get("vehicleId"))
+			() -> Assertions.assertEquals(vehicleId, obj.get("vehicle_id"))
 		);
 	}
 
@@ -80,7 +78,7 @@ public class PricingServiceApplicationTests {
 		MockHttpServletRequestBuilder createPost = post("/prices")
 				.accept(MediaType.APPLICATION_JSON_UTF8)
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content("{\"currency\":\"USD\", \"price\":\"12000\", \"vehicleId\":\"2\"}");
+				.content("{\"currency\":\"USD\", \"price\":\"12000\", \"vehicle_id\":\"2\"}");
 
 		MvcResult createResult = mockMvc.perform(createPost)
 				.andExpect(status().isCreated())
@@ -89,7 +87,7 @@ public class PricingServiceApplicationTests {
 		String content = createResult.getResponse().getContentAsString();
 
 		JSONObject obj = new JSONObject(content);
-		int priceId = (int) obj.get("priceId");
+		int priceId = (int) obj.get("price_id");
 
 		mockMvc.perform(delete("/prices/" + priceId))
 				.andExpect(status().isNoContent());
@@ -97,6 +95,54 @@ public class PricingServiceApplicationTests {
 		mockMvc.perform(get("/prices/" + priceId))
 				.andExpect(status().isNotFound());
 
+	}
+
+	static class UpdatePriceArgumentsProvider implements ArgumentsProvider {
+
+		public UpdatePriceArgumentsProvider() {}
+
+		@Override
+		public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+			return Stream.of(
+					Arguments.of("currency", "EUR", "10000.00", "USD", "300"),
+					Arguments.of("vehicle_id", "310", "10000.00", "USD", "301"),
+					Arguments.of("price", "22222.22", "10000.00", "USD", "302")
+			);
+		}
+	}
+
+	@ParameterizedTest
+	@ArgumentsSource(UpdatePriceArgumentsProvider.class)
+	@DisplayName("Update a price (via PATCH).")
+	public void testUpdatePrice(String parameter, String newValue, String price, String currency, String vehicleId) throws Exception {
+
+		MockHttpServletRequestBuilder createPost = post("/prices")
+				.accept(MediaType.APPLICATION_JSON_UTF8)
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content("{\"currency\":\"" + currency + "\", \"price\":\"" + price +"\", \"vehicle_id\":\"" + vehicleId + "\"}");
+
+		MvcResult createResult = mockMvc.perform(createPost)
+				.andExpect(status().isCreated())
+				.andReturn();
+
+		String content = createResult.getResponse().getContentAsString();
+
+		JSONObject obj = new JSONObject(content);
+		int priceId = (int) obj.get("price_id");
+
+		MockHttpServletRequestBuilder updatePost = patch("/prices/" + priceId)
+				.accept(MediaType.APPLICATION_JSON_UTF8)
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content("{\"" + parameter + "\":\"" + newValue + "\"}");
+
+		content = mockMvc.perform(updatePost)
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+
+		obj = new JSONObject(content);
+		Assertions.assertEquals(newValue, obj.get(parameter).toString());
 	}
 
 	@Test
@@ -113,11 +159,11 @@ public class PricingServiceApplicationTests {
 			mockMvc.perform(post("/prices/")
 					.accept(MediaType.APPLICATION_JSON_UTF8)
 					.contentType(MediaType.APPLICATION_JSON_UTF8)
-					.content("{\"currency\":\"USD\", \"price\":\"" + price + "\", \"vehicleId\":\"" + i + "\"}" ))
+					.content("{\"currency\":\"USD\", \"price\":\"" + price + "\", \"vehicle_id\":\"" + i + "\"}" ))
 					.andExpect(status().isCreated());
 		}
 
-		MockHttpServletRequestBuilder query = get("/prices/search/findByVehicleId?vehicleId=" + vehicleIdToFind);
+		MockHttpServletRequestBuilder query = get("/prices/search/findByVehicleId?vehicle_id=" + vehicleIdToFind);
 
 		String content = mockMvc.perform(query)
 				.andExpect(status().isOk())
@@ -126,14 +172,14 @@ public class PricingServiceApplicationTests {
 				.getContentAsString();
 
 		JSONObject obj = new JSONObject(content);
-		int returnedVehicleId = (int) obj.get("vehicleId");
+		int returnedVehicleId = (int) obj.get("vehicle_id");
 
 		Assertions.assertEquals(vehicleIdToFind, returnedVehicleId);
 
 	}
 
 	@Test
-	@DisplayName("Send an invalid currency.")
+	@DisplayName("Validate sending an invalid currency.")
 	public void testCurrencyValidation() throws Exception {
 
 		String currency = "ABC";  // bad currency code
@@ -145,12 +191,66 @@ public class PricingServiceApplicationTests {
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content("{\"currency\":\"" + currency +
 						"\", \"price\":\"" + price +
-						"\", \"vehicleId\":\"" + vehicleId +
+						"\", \"vehicle_id\":\"" + vehicleId +
 						"\"}");
 
 		mockMvc.perform(post)
-				.andExpect(status().isInternalServerError());
-//				.andExpect(jsonPath("Currency code must be valid."),);
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("errors.[0].code").value("currency.code.invalid"));
+	}
 
+	@Test
+	@DisplayName("Validate sending a null request.")
+	public void testNullRequestValidation() throws Exception {
+
+		MockHttpServletRequestBuilder post = post("/prices")
+				.accept(MediaType.APPLICATION_JSON_UTF8)
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content("{}");
+
+		mockMvc.perform(post)
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("errors.[0].code").value("currency.code.required"))
+				.andExpect(jsonPath("errors.[1].code").value("price.required"))
+				.andExpect(jsonPath("errors.[2].code").value("vehicle_id.required"));
+	}
+
+	@Test
+	@DisplayName("Validate saving an existing vehicle id.")
+	public void testExistingVehicleValidation() throws Exception {
+
+		String currency = "EUR";  // bad currency code
+		double price = 34000.00;
+		int vehicleId = 5;
+
+		MockHttpServletRequestBuilder post = post("/prices")
+				.accept(MediaType.APPLICATION_JSON_UTF8)
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content("{\"currency\":\"" + currency +
+						"\", \"price\":\"" + price +
+						"\", \"vehicle_id\":\"" + vehicleId +
+						"\"}");
+		// Save the price
+		mockMvc.perform(post)
+				.andExpect(status().isCreated());
+		// Try to save it again
+		mockMvc.perform(post)
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("errors.[0].code").value("vehicle_id.not.unique"));
+	}
+
+	@Autowired
+	String currencyCodes;
+
+	@Test
+	@DisplayName("Read currency code configuration file.")
+	public void testReadCurrencyCodes() throws IOException, FileNotFoundException {
+		FileInputStream fis = new FileInputStream("src/main/resources/currencies.properties");
+		Properties prop = new Properties();
+		prop.load(fis);
+		fis.close();
+	    String codesFromFile = prop.getProperty("currencies");
+		Assertions.assertNotNull(currencyCodes);
+		Assertions.assertEquals(codesFromFile, currencyCodes);
 	}
 }

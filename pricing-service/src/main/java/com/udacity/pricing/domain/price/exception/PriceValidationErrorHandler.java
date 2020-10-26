@@ -30,30 +30,28 @@ public class PriceValidationErrorHandler implements WebErrorHandler {
 
     @Override
     public HandledException handle(Throwable t) {
-        List keys = new ArrayList<String>();
-        keys.add("currency.code.invalid");
-        keys.add("currency.code.required");
-        keys.add("price.required");
-        keys.add("vehicleId.required");
-        keys.add("vehicleId.not.unique");
 
         Set codes = new HashSet<String>();
 
         while ((t != null) && !(t instanceof ConstraintViolationException) && !(t instanceof DataIntegrityViolationException)) {
             t = t.getCause();
         }
-
-        // There can be multiple constraint violations, so collect them all.
+        // @TODO remove constant code strings
         if (t instanceof ConstraintViolationException) {
+            List keys = new ArrayList<String>();
+            keys.add("currency.code.invalid");
+            keys.add("currency.code.required");
+            keys.add("price.required");
+            keys.add("vehicle_id.required");
+            // There can be multiple constraint violations, so collect them all.
             for (int i = 0; i < keys.size(); i++) {
                 if (t.getMessage().contains((CharSequence) keys.get(i))){
                     codes.add(keys.get(i));
                 }
             }
-        } else if (t instanceof DataIntegrityViolationException) {
-            codes.add("vehicleId.not.unique");
-        } else {
-            codes.add("unknown_error");
+        }
+        else if (t instanceof DataIntegrityViolationException) {
+            codes.add("vehicle_id.not.unique");
         }
         return new HandledException(codes, HttpStatus.BAD_REQUEST, null);
     }

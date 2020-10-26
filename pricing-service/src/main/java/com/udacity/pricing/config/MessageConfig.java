@@ -5,15 +5,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 @Configuration
-public class AppConfig {
+public class MessageConfig {
 
     @Bean
     public ResourceBundleMessageSource messageSource() {
 
         var source = new ResourceBundleMessageSource();
-        source.setBasenames("messages/labels");
+        source.setBasenames("labels");
         source.setUseCodeAsDefaultMessage(true);
 
         return source;
     }
+
 }
