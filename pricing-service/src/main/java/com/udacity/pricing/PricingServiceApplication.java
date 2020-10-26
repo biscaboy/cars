@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *             - Unit testing Rest Services: https://www.springboottutorial.com/unit-testing-for-spring-boot-rest-services
  * Baeldung - Creating an executable jar: https://www.baeldung.com/spring-boot-run-maven-vs-executable-jar
  *          - Validating Input to Microservice: https://www.baeldung.com/spring-boot-bean-validation
+ *          - Parameterized Tests: https://www.baeldung.com/parameterized-tests-junit-5
  * Nick Gibbon - Test Method Order: https://medium.com/pareture/order-test-execution-in-junit5-jupiter-e3d61ab15f26
  * StackOverflow user1809566 - Json Queries: https://stackoverflow.com/questions/47769549/check-jsonpath-for-empty-string
  *               Greg Case - generating random nubmers: https://stackoverflow.com/questions/363681/how-do-i-generate-random-integers-within-a-specific-range-in-java
@@ -21,6 +22,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *               OldCurmudgeon - Using @JsonProperty: https://stackoverflow.com/questions/12583638/when-is-the-jsonproperty-property-used-and-what-is-it-used-for
  *               Nivas - Currency Code Mapping: https://stackoverflow.com/questions/3888991/currency-code-to-currency-symbol-mapping
  *               Roi Snir - Microservice Delete Requests: https://stackoverflow.com/questions/57235450/how-to-make-an-http-delete-request-with-json-body-in-flutter
+ *               Luke Peterson - PUT vs PATCH: https://stackoverflow.com/questions/24241893/should-i-use-patch-or-put-in-my-rest-api
  * Jayway JsonPath Evaluator: https://jsonpath.herokuapp.com/
  * Geeks for Geeks - Parsing Json: https://www.geeksforgeeks.org/parse-json-java/
  * Assertible.com - JSON path Syntax: JSON path syntax in detail
