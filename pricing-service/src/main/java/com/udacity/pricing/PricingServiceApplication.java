@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * References:
  * Spring Boot - Accessing Data with a Restful API: https://spring.io/guides/gs/accessing-data-rest/
  *             - API Docs: https://docs.spring.io/spring-framework/docs
+ *             - Packaging: https://docs.spring.io/spring-boot/docs/2.3.4.RELEASE/maven-plugin/reference/html/#repackage
  * In28Minutes - Validation for Rest Services: https://www.springboottutorial.com/spring-boot-validation-for-rest-services
  *             - Unit testing Rest Services: https://www.springboottutorial.com/unit-testing-for-spring-boot-rest-services
  * Baeldung - Creating an executable jar: https://www.baeldung.com/spring-boot-run-maven-vs-executable-jar
@@ -23,6 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *               Nivas - Currency Code Mapping: https://stackoverflow.com/questions/3888991/currency-code-to-currency-symbol-mapping
  *               Roi Snir - Microservice Delete Requests: https://stackoverflow.com/questions/57235450/how-to-make-an-http-delete-request-with-json-body-in-flutter
  *               Luke Peterson - PUT vs PATCH: https://stackoverflow.com/questions/24241893/should-i-use-patch-or-put-in-my-rest-api
+ *               crm86 - Packaging a jar with Spring Boot: https://stackoverflow.com/questions/38792031/springboot-making-jar-files-no-auto-configuration-classes-found-in-meta-inf
  * Jayway JsonPath Evaluator: https://jsonpath.herokuapp.com/
  * Geeks for Geeks - Parsing Json: https://www.geeksforgeeks.org/parse-json-java/
  * Assertible.com - JSON path Syntax: JSON path syntax in detail
@@ -34,8 +36,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * ZetCode.com - Using a MessageSource Tutorial - http://zetcode.com/spring/messagesource/
  * JavaCodeExamples - Java ArrayList for loop - https://www.javacodeexamples.com/java-arraylist-for-loop-for-each-example/906
  *
- *
- * @TODO add all references for yesterday's work
  */
 @SpringBootApplication
 public class PricingServiceApplication {
