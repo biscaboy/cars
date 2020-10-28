@@ -10,10 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class CarServiceTests {
@@ -76,6 +75,21 @@ public class CarServiceTests {
         assertNotNull(found.getLocation().getZip());
         // TODO: send the price to the pricing api
         //assertTrue(found.getPrice() > 0);
+
+    }
+
+    @Test
+    public void testDeleteCar() {
+        int count = carService.list().size();
+        Car saved = carService.save(chevy);
+        int insertCount = carService.list().size();
+        carService.delete(saved.getId());
+        int deleteCount = carService.list().size();
+        assertAll ("Delete a Car",
+                () -> assertEquals(count + 1, insertCount, "The car was never saved"),
+                () -> assertFalse(count > deleteCount, "More then one car was deleted." ),
+                () -> assertEquals(count, deleteCount, "The car was not deleted.")
+        );
 
     }
 }

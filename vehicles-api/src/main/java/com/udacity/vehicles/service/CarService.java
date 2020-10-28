@@ -25,8 +25,6 @@ public class CarService {
         /**
          * TODO: Add the Maps and Pricing Web Clients you create
          *   in `VehiclesApiApplication` as arguments and set them here.
-         *
-         * TODO: Rather than Autowired can it be done with dependency injection?
          */
         this.repository = repository;
         this.pricingClient = priceClient;
@@ -104,11 +102,12 @@ public class CarService {
          * TODO: Find the car by ID from the `repository` if it exists.
          *   If it does not exist, throw a CarNotFoundException
          */
-
+        Car car = repository.findById(id).orElseThrow(CarNotFoundException::new);
 
         /**
          * TODO: Delete the car from the repository.
          */
+        repository.deleteById(car.getId());
 
 
     }
