@@ -1,5 +1,7 @@
 package com.udacity.vehicles.client.prices;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 
 /**
@@ -9,6 +11,8 @@ public class Price {
 
     private String currency;
     private BigDecimal price;
+
+    @JsonProperty("vehicle_id")
     private Long vehicleId;
 
     public Price() {

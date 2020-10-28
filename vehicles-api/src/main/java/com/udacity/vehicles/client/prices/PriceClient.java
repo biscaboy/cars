@@ -35,13 +35,11 @@ public class PriceClient {
             Price price = client
                     .get()
                     .uri(uriBuilder -> uriBuilder
-                            .path("/prices/")
-                            .queryParam("vehicleId", vehicleId)
+                            .path("/prices/search/findByVehicleId")
+                            .queryParam("vehicle_id", vehicleId)
                             .build()
                     )
                     .retrieve().bodyToMono(Price.class).block();
-
-
 
             return String.format("%s %s", price.getCurrency(), price.getPrice());
 
@@ -50,4 +48,5 @@ public class PriceClient {
         }
         return "(consult price)";
     }
+
 }

@@ -73,9 +73,10 @@ public class CarServiceTests {
         assertNotNull(found.getLocation().getCity());
         assertNotNull(found.getLocation().getState());
         assertNotNull(found.getLocation().getZip());
-        // TODO: send the price to the pricing api
-        //assertTrue(found.getPrice() > 0);
-
+        assertNotEquals("(consult price)", found.getPrice());
+        String [] split  = found.getPrice().split(" ");
+        assertEquals("USD", split[0]);
+        assertTrue(Double.valueOf(split[1]) > 0.0);
     }
 
     @Test

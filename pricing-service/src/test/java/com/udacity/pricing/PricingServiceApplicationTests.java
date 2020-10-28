@@ -47,7 +47,7 @@ public class PricingServiceApplicationTests {
 
 		String currency = "USD";
 		double price = 12000.00;
-		int vehicleId = 1;
+		int vehicleId = 301;
 
 		MockHttpServletRequestBuilder post = post("/prices")
 				.accept(MediaType.APPLICATION_JSON_UTF8)
@@ -78,7 +78,7 @@ public class PricingServiceApplicationTests {
 		MockHttpServletRequestBuilder createPost = post("/prices")
 				.accept(MediaType.APPLICATION_JSON_UTF8)
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content("{\"currency\":\"USD\", \"price\":\"12000\", \"vehicle_id\":\"2\"}");
+				.content("{\"currency\":\"USD\", \"price\":\"12000\", \"vehicle_id\":\"300\"}");
 
 		MvcResult createResult = mockMvc.perform(createPost)
 				.andExpect(status().isCreated())
@@ -221,7 +221,7 @@ public class PricingServiceApplicationTests {
 
 		String currency = "EUR";  // bad currency code
 		double price = 34000.00;
-		int vehicleId = 5;
+		int vehicleId = 305;
 
 		MockHttpServletRequestBuilder post = post("/prices")
 				.accept(MediaType.APPLICATION_JSON_UTF8)
