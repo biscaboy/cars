@@ -6,11 +6,15 @@ import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.Details;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.lang.reflect.Executable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,6 +61,7 @@ public class CarServiceTests {
     }
 
     @Test
+    @DisplayName("Save a car")
     public void testSaveCar() {
         Car saved = carService.save(chevy);
         assertEquals(chevy.getDetails().getBody(), saved.getDetails().getBody());
@@ -64,6 +69,7 @@ public class CarServiceTests {
     }
 
     @Test
+    @DisplayName("Find a car with an id")
     public void testFindCarById() {
         Car saved = carService.save(audi);
         assertNotNull(saved.getId());
@@ -80,6 +86,7 @@ public class CarServiceTests {
     }
 
     @Test
+    @DisplayName("Delete a car")
     public void testDeleteCar() {
         int count = carService.list().size();
         Car saved = carService.save(chevy);
@@ -91,6 +98,11 @@ public class CarServiceTests {
                 () -> assertFalse(count > deleteCount, "More then one car was deleted." ),
                 () -> assertEquals(count, deleteCount, "The car was not deleted.")
         );
+    }
 
+    @Test
+    @DisplayName("Find a car with a bad id")
+    public void testFindCarFail() {
+        assertThrows(CarNotFoundException.class, () -> { carService.findById(0L); });
     }
 }
