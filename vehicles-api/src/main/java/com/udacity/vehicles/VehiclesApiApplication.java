@@ -28,15 +28,32 @@ import java.util.List;
  *      Madhusudana Reffy Sunnapu - Using @Qualifier Annotation - https://stackoverflow.com/questions/36183624/how-to-autowire-by-name-in-spring-with-annotations
  *      Nitin - Hateoas with Spring Boot 2.2.0+ - https://stackoverflow.com/questions/25352764/hateoas-methods-not-found#25368187
  *      zhuhang.jasper - @Valid vs @Validatated - https://stackoverflow.com/questions/36173332/difference-between-valid-and-validated-in-spring
+ *      Multiple contributors - Maven Plugins Not Found - https://stackoverflow.com/questions/20496239/maven-plugins-can-not-be-found-in-intellij
+ *      andrea - maven-compiler-plugin not found - https://stackoverflow.com/questions/60120587/maven-compiler-plugin-not-found
  *
- *  ModelMapper.org - Javadoc - http://modelmapper.org/javadoc/org/modelmapper
- *  Lokesh Gupto - Maven dependencies for JUnit 5 - https://howtodoinjava.com/junit5/junit5-maven-dependency/
- *                 Spring Hateoas Tutorial - https://howtodoinjava.com/spring5/hateoas/spring-hateoas-tutorial/
- *  Spring Hateoas - Javadocs - https://docs.spring.io/spring-hateoas/docs/1.1.2.RELEASE/api/
- *                 - Reference - https://docs.spring.io/spring-hateoas/docs/current/reference/html/
- *  Maven Repository - https://mvnrepository.com
- *  Baeldung - Java Optional Class - https://www.baeldung.com/java-optional
- *  Brian Hannaway - HATEOAS REST Services with Spring - https://dzone.com/articles/hypermedia-driven-rest-services-with-spring-hateoa
+ *  Apache Maven Project -
+ *      The Compiler - http://maven.apache.org/plugins/maven-compiler-plugin/index.html
+ *      Source and Target Settings - http://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html
+ *      Plugin Registry - http://people.apache.org/~ltheussl/maven-stage-site/guides/introduction/introduction-to-plugin-registry.html
+ *      Maven Repository - https://mvnrepository.com/
+ *      Lokesh Gupto - Maven dependencies for JUnit 5 - https://howtodoinjava.com/junit5/junit5-maven-dependency/
+ *
+ *  Eureka Service Discovery
+ *      Spring Cloud Docs - https://cloud.spring.io/spring-cloud-netflix/multi/multi__service_discovery_eureka_clients.html
+ *      The Practical Developer - https://thepracticaldeveloper.com/spring-boot-service-discovery-eureka/
+ *      studytonight.com - Service Discovery using Eureka - https://www.studytonight.com/post/service-discovery-using-eureka-in-spring-microservices
+ *      Spring Cloud Netflix on GitHub - eureka.client.enabled - https://github.com/spring-cloud/spring-cloud-netflix/issues/1511
+ *      Baeldung - Introduction to Spring Cloud - https://www.baeldung.com/spring-cloud-netflix-eureka
+ *
+ *  HATEOAS
+ *      Spring Hateoas - Javadocs - https://docs.spring.io/spring-hateoas/docs/1.1.2.RELEASE/api/
+ *                     - Reference - https://docs.spring.io/spring-hateoas/docs/current/reference/html/
+ *      Lokesh Gupto - Spring Hateoas Tutorial - https://howtodoinjava.com/spring5/hateoas/spring-hateoas-tutorial/
+ *      Brian Hannaway - HATEOAS REST Services with Spring - https://dzone.com/articles/hypermedia-driven-rest-services-with-spring-hateoa
+ *
+ *  Other Topics
+ *      ModelMapper.org - Javadoc - http://modelmapper.org/javadoc/org/modelmapper
+ *      Baeldung - Java Optional Class - https://www.baeldung.com/java-optional
  *
  */
 @SpringBootApplication
