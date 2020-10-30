@@ -51,6 +51,12 @@ import java.util.List;
  *      Lokesh Gupto - Spring Hateoas Tutorial - https://howtodoinjava.com/spring5/hateoas/spring-hateoas-tutorial/
  *      Brian Hannaway - HATEOAS REST Services with Spring - https://dzone.com/articles/hypermedia-driven-rest-services-with-spring-hateoa
  *
+ *  Spring Boot Controller Testing
+ *      The Practical Developer - https://thepracticaldeveloper.com/guide-spring-boot-controller-tests/
+ *      Spring Boot Sample Tests - https://github.com/spring-projects/spring-framework/blob/master/spring-test/src/test/java/org/springframework/test/web/client/samples/SampleTests.java
+ *      JacksonTester JavaDoc - https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/json/JacksonTester.html
+ *
+ *
  *  Other Topics
  *      ModelMapper.org - Javadoc - http://modelmapper.org/javadoc/org/modelmapper
  *      Baeldung - Java Optional Class - https://www.baeldung.com/java-optional
