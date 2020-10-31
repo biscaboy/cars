@@ -4,6 +4,9 @@ import com.udacity.vehicles.client.maps.MapsClient;
 import com.udacity.vehicles.client.prices.PriceClient;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
+
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -81,6 +84,10 @@ public class CarService {
      * @throws CarNotFoundException if the car id is provided by does not exist in the data store
      */
     public Car save(Car car) throws CarNotFoundException {
+
+        LocalDateTime timestamp = LocalDateTime.now();
+        car.setModifiedAt(timestamp);
+
         if (car.getId() != null) {
             return repository.findById(car.getId())
                     .map(carToBeUpdated -> {
@@ -89,7 +96,7 @@ public class CarService {
                         return repository.save(carToBeUpdated);
                     }).orElseThrow(CarNotFoundException::new);
         }
-
+        car.setCreatedAt(timestamp);
         return repository.save(car);
     }
 

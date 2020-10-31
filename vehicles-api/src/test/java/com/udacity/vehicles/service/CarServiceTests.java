@@ -1,5 +1,6 @@
 package com.udacity.vehicles.service;
 
+import java.time.LocalDateTime;
 import com.udacity.vehicles.domain.Condition;
 import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
@@ -9,20 +10,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.lang.reflect.Executable;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.function.Consumer;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.core.env.Environment;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 public class CarServiceTests {
 
     private Car chevy;
     private Car audi;
+
+    @Autowired
+    Environment env;
+
+    @Autowired
+    DiscoveryClient discoveryClient;
 
     @Autowired
     CarService carService;
@@ -58,6 +64,7 @@ public class CarServiceTests {
         details.setModel("A4");
         details.setManufacturer(new Manufacturer(100, "Audi"));
         audi.setDetails(details);
+
     }
 
     @Test
@@ -68,21 +75,43 @@ public class CarServiceTests {
         assertEquals(chevy.getDetails().getMileage(), saved.getDetails().getMileage());
     }
 
+    /**
+     * Complete a full request and check the results with pricing
+     * and location information as well.
+     *
+     * Since this is a backend service integration test, to ensure the Service
+     * works even if the backend API's are down, check to see if the
+     * api services are available and test the modified behavior.
+     */
     @Test
     @DisplayName("Find a car with an id")
     public void testFindCarById() {
+        boolean mapsAvailable = ServiceUtil.pingURL(env.getProperty("maps.endpoint"), 1000);
+
+        boolean pricingAvailable = ServiceUtil.pingURL(discoveryClient, env.getProperty("pricing.service.name"),
+                                                       env.getProperty("pricing.endpoint.local"), 1000);
+
         Car saved = carService.save(audi);
         assertNotNull(saved.getId());
 
         Car found = carService.findById(saved.getId());
-        assertNotNull(found.getLocation().getAddress());
-        assertNotNull(found.getLocation().getCity());
-        assertNotNull(found.getLocation().getState());
-        assertNotNull(found.getLocation().getZip());
-        assertNotEquals("(consult price)", found.getPrice());
-        String [] split  = found.getPrice().split(" ");
-        assertEquals("USD", split[0]);
-        assertTrue(Double.valueOf(split[1]) > 0.0);
+        if (mapsAvailable) {
+            assertNotNull(found.getLocation().getAddress());
+            assertNotNull(found.getLocation().getCity());
+            assertNotNull(found.getLocation().getState());
+            assertNotNull(found.getLocation().getZip());
+        } else {
+            assertNotNull(found.getLocation());
+        }
+
+        if (pricingAvailable) {
+            assertNotEquals("(consult price)", found.getPrice());
+            String[] split = found.getPrice().split(" ");
+            assertEquals("USD", split[0]);
+            assertTrue(Double.valueOf(split[1]) > 0.0);
+        } else {
+            assertEquals("(consult price)", found.getPrice());
+        }
     }
 
     @Test
