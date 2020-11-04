@@ -1,6 +1,5 @@
 package com.udacity.vehicles.api;
 
-
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -12,6 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/cars")
+// Swagger Documentation API Annotation.  Tags
+@Api(value="Vehicle Inventory API")
 class CarController {
 
     private final CarService carService;
@@ -44,6 +48,11 @@ class CarController {
      * @return list of vehicles
      */
     @GetMapping
+        @ApiOperation(value = "List all cars in the inventory",
+                notes = "All cars currently in the system will be listed.  " +
+                        "Price and location information are generated randomly." +
+                        "These cars do not represent anything in the real world.")
+
     Resources<Resource<Car>> list() {
         List<Resource<Car>> resources = carService.list().stream().map(assembler::toResource)
                 .collect(Collectors.toList());
@@ -57,15 +66,16 @@ class CarController {
      * @return all information for the requested vehicle
      */
     @GetMapping("/{id}")
-    Resource<Car> get(@PathVariable Long id) {
+    @ApiOperation(value = "Find a car by its vehicle id in the current inventory.",
+            notes = "The id is generated with the vehicle during POST request.")
+    Resource<Car> get(@ApiParam(value="id of the vehicle to find", required=true)
+                        @PathVariable Long id) {
         /**
          * DONE! : Use the `findById` method from the Car Service to get car information.
          * DONE! : Use the `assembler` on that car and return the resulting output.
          *   Update the first line as part of the above implementing.
          *
-         * TODO: djd - handle exception or add error handling to project?
-         */
-        Car car = carService.findById(id);
+         */        Car car = carService.findById(id);
         return assembler.toResource(car);
     }
 
@@ -76,7 +86,10 @@ class CarController {
      * @throws URISyntaxException if the request contains invalid fields or syntax
      */
     @PostMapping
-    ResponseEntity<?> post(@Valid @RequestBody Car car) throws URISyntaxException {
+    @ApiOperation(value = "Save a car to the inventory.",
+            notes = "Save a car. ")
+    ResponseEntity<?> post(@ApiParam(value="The Car to save.",  required = true)
+                            @Valid @RequestBody Car car) throws URISyntaxException {
         /**
          * DONE! : Use the `save` method from the Car Service to save the input car.
          * DONE! : Use the `assembler` on that saved car and return as part of the response.
@@ -94,7 +107,13 @@ class CarController {
      * @return response that the vehicle was updated in the system
      */
     @PutMapping("/{id}")
-    ResponseEntity<?> put(@PathVariable Long id, @Valid @RequestBody Car car) {
+    @ApiOperation(value = "Update a car by id in the current inventory.",
+            notes = "The id is generated with the vehicle during POST request.  Only vehicle details and location are mutible.")
+
+    ResponseEntity<?> put(@ApiParam(value="id of the vehicle to update", required=true)
+                            @PathVariable Long id,
+                          @ApiParam(value="Car object to save. (Only detail and location fields will be updated.)", required=true)
+                            @Valid @RequestBody Car car) {
         /**
          * DONE! : Set the id of the input car object to the `id` input.
          * DONE! : Save the car using the `save` method from the Car service
@@ -113,7 +132,11 @@ class CarController {
      * @return response that the related vehicle is no longer in the system
      */
     @DeleteMapping("/{id}")
-    ResponseEntity<?> delete(@PathVariable Long id) {
+    @ApiOperation(value = "Delete a car by id in the current inventory.",
+            notes = "The id is generated with the vehicle during POST request.")
+
+    ResponseEntity<?> delete(@ApiParam(value="id of the vehicle to delete", required=true)
+                                @PathVariable Long id) {
         /**
          * DONE! : Use the Car Service to delete the requested vehicle.
          */

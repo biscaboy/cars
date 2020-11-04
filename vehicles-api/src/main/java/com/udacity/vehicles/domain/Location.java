@@ -1,5 +1,9 @@
 package com.udacity.vehicles.domain;
 
+import com.udacity.vehicles.domain.car.Car;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -11,6 +15,7 @@ import javax.validation.constraints.NotNull;
  * the maps API.
  */
 @Embeddable
+@ApiModel(parent = Car.class, description = "Address, longitude and latitude of the vehicle - (system generated)")
 public class Location {
 
     @NotNull

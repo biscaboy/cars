@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -28,7 +29,8 @@ public class CarServiceTests {
     Environment env;
 
     @Autowired
-    DiscoveryClient discoveryClient;
+    @Qualifier("eurekaUrl")
+    String eurekaUrl;
 
     @Autowired
     CarService carService;
@@ -87,9 +89,7 @@ public class CarServiceTests {
     @DisplayName("Find a car with an id")
     public void testFindCarById() {
         boolean mapsAvailable = ServiceUtil.pingURL(env.getProperty("maps.endpoint"), 1000);
-
-        boolean pricingAvailable = ServiceUtil.pingURL(discoveryClient, env.getProperty("pricing.service.name"),
-                                                       env.getProperty("pricing.endpoint.local"), 1000);
+        boolean pricingAvailable = ServiceUtil.pingURL(eurekaUrl, 1000);
 
         Car saved = carService.save(audi);
         assertNotNull(saved.getId());

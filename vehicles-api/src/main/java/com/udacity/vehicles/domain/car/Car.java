@@ -13,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -22,6 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@ApiModel(description = "Represents a car for sale in inventory")
 public class Car {
 
     @Id
@@ -57,6 +61,7 @@ public class Car {
         this.id = id;
     }
 
+    @ApiModelProperty(value = "Date and time of creation")
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -65,6 +70,7 @@ public class Car {
         this.createdAt = createdAt;
     }
 
+    @ApiModelProperty(value = "Date and time of latest update")
     public LocalDateTime getModifiedAt() {
         return modifiedAt;
     }
@@ -73,6 +79,7 @@ public class Car {
         this.modifiedAt = modifiedAt;
     }
 
+    @ApiModelProperty(value = "Condition", allowableValues = "NEW | USED")
     public Condition getCondition() {
         return condition;
     }
@@ -81,6 +88,7 @@ public class Car {
         this.condition = condition;
     }
 
+    @ApiModelProperty(value = "Details for this car (See DETAILS Model)")
     public Details getDetails() {
         return details;
     }
@@ -89,6 +97,7 @@ public class Car {
         this.details = details;
     }
 
+    @ApiModelProperty(value = "Address location for this car - Randomly generated (See LOCATTION Model)")
     public Location getLocation() {
         return location;
     }
@@ -97,6 +106,7 @@ public class Car {
         this.location = location;
     }
 
+    @ApiModelProperty(value = "Price (and listed currency) of this car - Randomly generated")
     public String getPrice() {
         return price;
     }

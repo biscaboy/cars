@@ -1,6 +1,9 @@
 package com.udacity.vehicles.domain.car;
 
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +14,7 @@ import javax.validation.constraints.NotNull;
  * along with related methods for access and setting.
  */
 @Embeddable
+@ApiModel(parent = Car.class, description = "Represents the details of a Car")
 public class Details {
 
     @NotBlank
@@ -37,6 +41,7 @@ public class Details {
 
     private String externalColor;
 
+    @ApiModelProperty( value = "Car body type (e.g. sedan, coupe, SUV, pickup, hatch-back, other")
     public String getBody() {
         return body;
     }
@@ -45,6 +50,7 @@ public class Details {
         this.body = body;
     }
 
+    @ApiModelProperty(value = "Model name of the car (e.g. Impala, Jetta, Model S, Eldorado, etc)")
     public String getModel() {
         return model;
     }
@@ -53,6 +59,7 @@ public class Details {
         this.model = model;
     }
 
+    @ApiModelProperty(value = "Producing and designing manufacturer of the car")
     public Manufacturer getManufacturer() {
         return manufacturer;
     }
@@ -61,6 +68,7 @@ public class Details {
         this.manufacturer = manufacturer;
     }
 
+    @ApiModelProperty(value = "Number of door on the car")
     public Integer getNumberOfDoors() {
         return numberOfDoors;
     }
@@ -69,6 +77,7 @@ public class Details {
         this.numberOfDoors = numberOfDoors;
     }
 
+    @ApiModelProperty(value = "Fuel type (e.g. Diesel, Gasoline, Electric, Hydrogen, Flinstone Feet, etc)")
     public String getFuelType() {
         return fuelType;
     }
@@ -81,10 +90,12 @@ public class Details {
         return engine;
     }
 
+    @ApiModelProperty(value = "Engine type (e.g. cylinders and liters if gasoline \"2.3 Litre V6\", Battery size if electric, etc) ")
     public void setEngine(String engine) {
         this.engine = engine;
     }
 
+    @ApiModelProperty(value = "Milage of the care determined by reading the odometer")
     public Integer getMileage() {
         return mileage;
     }
@@ -93,6 +104,7 @@ public class Details {
         this.mileage = mileage;
     }
 
+    @ApiModelProperty(value = "Model year")
     public Integer getModelYear() {
         return modelYear;
     }
@@ -101,6 +113,7 @@ public class Details {
         this.modelYear = modelYear;
     }
 
+    @ApiModelProperty(value = "Production year")
     public Integer getProductionYear() {
         return productionYear;
     }
@@ -109,6 +122,7 @@ public class Details {
         this.productionYear = productionYear;
     }
 
+    @ApiModelProperty(value = "The car's exterior paint color")
     public String getExternalColor() {
         return externalColor;
     }

@@ -2,20 +2,19 @@ package com.udacity.vehicles;
 
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import com.udacity.vehicles.domain.manufacturer.ManufacturerRepository;
+import com.udacity.vehicles.eureka.EurekaEndpoint;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.List;
 
 /**
  * Launches a Spring Boot application for the Vehicles API,
@@ -56,10 +55,22 @@ import java.util.List;
  *      Spring Boot Sample Tests - https://github.com/spring-projects/spring-framework/blob/master/spring-test/src/test/java/org/springframework/test/web/client/samples/SampleTests.java
  *      JacksonTester JavaDoc - https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/json/JacksonTester.html
  *
+ *  Swagger
+ *      Official docs - https://swagger.io/docs
+ *                      https://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html
+ *      Core Annotations - https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X
+ *      Bhargav Bachina  Example Swagger Implementation on a Webservice API - https://github.com/bbachi/java-webservice-example
+ *      Stack Overflow - Ron - Customizing https://stackoverflow.com/questions/26742521/sending-dynamic-custom-headers-in-swagger-ui-try-outs
+ *      Java Dev Journal - Manish Sharma - https://www.javadevjournal.com/spring/rest/swagger-2-spring-rest-api/
+ *      Java Guides - Ramesh Fadatare - https://www.javaguides.net/2018/10/swagger-annotations-for-rest-api-documentation.html
+ *                                    - https://www.javaguides.net/2018/10/spring-boot-2-restful-api-documentation-with-swagger2-tutorial.html
+ *      Custom Layouts - https://github.com/swagger-api/swagger-ui/blob/master/docs/customization/custom-layout.md
+ *      Spring and React.js Tutorial - https://spring.io/guides/tutorials/react-and-spring-data-rest/
  *
  *  Other Topics
  *      ModelMapper.org - Javadoc - http://modelmapper.org/javadoc/org/modelmapper
  *      Baeldung - Java Optional Class - https://www.baeldung.com/java-optional
+ *      Terms of Service - Website Policies - https://www.websitepolicies.com/blog/sample-terms-service-template
  *
  */
 @SpringBootApplication
@@ -107,34 +118,34 @@ public class VehiclesApiApplication {
 
     /**
      * Web Client for the pricing API
-     * DONE! : Find the service dynamically from the eureka server.
-     *
-     * This method initialized the connection to the Pricing API
-     * or a local server instance if a remote connection is not
-     * availiable.
-     *
-     * @param connectToEureka if true discover and use remote service API,
-     *                        if false use local endpoint.
-     * @param serviceName the name of the Eureka service to discover.
-     * @param localEndpoint where to communicate for the pricing API.
-     * @return created pricing endpoint
      */
     @Bean(name="pricing")
-    public WebClient webClientPricing(
+    public WebClient webClientPricing(@Qualifier("eurekaUrl") String eurekaUrl) {
+        return WebClient.create(eurekaUrl);
+
+    }
+
+    /**
+     * DONE! : Find the service dynamically from the eureka server.
+     *
+     * This method provides the endpoint url of the Pricing API
+     * on the Eureka server.  It returns an endpoint for a local server
+     * instance if a remote connection via Eureka is not available.
+     *
+     *  @param connectToEureka if true discover and use remote service API,
+     *                        if false use local endpoint.
+     *  @param serviceName the name of the Eureka service to discover.
+     *  @param localEndpoint where to communicate for the pricing API.
+     *  @return created pricing endpoint url
+     */
+    @Bean(name="eurekaUrl")
+    public String eurekaUrl (
             @Value("${pricing.endpoint.use.eureka:false}") boolean connectToEureka,
             @Value("${pricing.service.name:PRICING-SERVICE}") String serviceName,
             @Value("${pricing.endpoint.local:http://localhost:8082}") String localEndpoint) {
 
-        String endpoint = localEndpoint;
-
-        if (connectToEureka) {
-            List<ServiceInstance> list = discoveryClient.getInstances(serviceName);
-            if (list != null && list.size() > 0) {
-                endpoint = list.get(0).getUri().toString();
-            }
-        }
-        return WebClient.create(endpoint);
-
+        EurekaEndpoint endpoint = new EurekaEndpoint(discoveryClient, connectToEureka, serviceName, localEndpoint);
+        return endpoint.lookup();
     }
 
 }
