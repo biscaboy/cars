@@ -24,7 +24,7 @@ public class SwaggerConfig {
     private Contact apiContact = new springfox.documentation.service.Contact("David Dickinson", "https://github.com/biscaboy", "biscaboy@pm.me");
     private String apiLicense = "The MIT License";
     private String getApiLicenseUrl = "https://mit-license.org/";
-    private String apiTermsOfService = "https://github.com/biscaboy/cars/blob/main/tos.md";
+    private String apiTermsOfService = "https://github.com/biscaboy/cars/blob/main/vehicles-api/tos.md";
 
     @Bean
     public Docket api() {
