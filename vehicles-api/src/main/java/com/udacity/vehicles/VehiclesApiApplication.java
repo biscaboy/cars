@@ -29,6 +29,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  *      zhuhang.jasper - @Valid vs @Validatated - https://stackoverflow.com/questions/36173332/difference-between-valid-and-validated-in-spring
  *      Multiple contributors - Maven Plugins Not Found - https://stackoverflow.com/questions/20496239/maven-plugins-can-not-be-found-in-intellij
  *      andrea - maven-compiler-plugin not found - https://stackoverflow.com/questions/60120587/maven-compiler-plugin-not-found
+ *       Marok - Logging Level Properties -https://stackoverflow.com/questions/35353869/how-turn-off-debug-log-messages-in-spring-boot
  *
  *  Apache Maven Project -
  *      The Compiler - http://maven.apache.org/plugins/maven-compiler-plugin/index.html

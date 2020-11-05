@@ -5,9 +5,8 @@ import com.udacity.vehicles.client.prices.PriceClient;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -39,7 +38,15 @@ public class CarService {
      * @return a list of all vehicles in the CarRepository
      */
     public List<Car> list() {
-        return repository.findAll();
+
+        List<Car> cars = repository.findAll();
+
+        cars.forEach(c -> {
+            c.setLocation(mapsClient.getAddress(c.getLocation()));
+            c.setPrice(pricingClient.getPrice(c.getId()));
+        });
+
+        return cars;
     }
 
     /**
@@ -85,9 +92,6 @@ public class CarService {
      */
     public Car save(Car car) throws CarNotFoundException {
 
-        LocalDateTime timestamp = LocalDateTime.now();
-        car.setModifiedAt(timestamp);
-
         if (car.getId() != null) {
             return repository.findById(car.getId())
                     .map(carToBeUpdated -> {
@@ -96,8 +100,11 @@ public class CarService {
                         return repository.save(carToBeUpdated);
                     }).orElseThrow(CarNotFoundException::new);
         }
-        car.setCreatedAt(timestamp);
-        return repository.save(car);
+
+        Car saved = repository.save(car);
+        saved.setPrice(pricingClient.getPrice(saved.getId()));
+        saved.setLocation(mapsClient.getAddress(car.getLocation()));
+        return saved;
     }
 
     /**
@@ -115,7 +122,5 @@ public class CarService {
          * DONE! : Delete the car from the repository.
          */
         repository.deleteById(car.getId());
-
-
     }
 }

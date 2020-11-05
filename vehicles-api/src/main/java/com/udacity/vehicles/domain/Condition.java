@@ -3,7 +3,6 @@ package com.udacity.vehicles.domain;
 import com.udacity.vehicles.domain.car.Car;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
  * Available values for condition of a given car.

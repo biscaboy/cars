@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +48,7 @@ class CarController {
      * Creates a list to store any vehicles.
      * @return list of vehicles
      */
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
         @ApiOperation(value = "List all cars in the inventory",
                 notes = "All cars currently in the system will be listed.  " +
                         "Price and location information are generated randomly." +
@@ -65,7 +66,7 @@ class CarController {
      * @param id the id number of the given vehicle
      * @return all information for the requested vehicle
      */
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Find a car by its vehicle id in the current inventory.",
             notes = "The id is generated with the vehicle during POST request.")
     Resource<Car> get(@ApiParam(value="id of the vehicle to find", required=true)
@@ -75,7 +76,8 @@ class CarController {
          * DONE! : Use the `assembler` on that car and return the resulting output.
          *   Update the first line as part of the above implementing.
          *
-         */        Car car = carService.findById(id);
+         */
+        Car car = carService.findById(id);
         return assembler.toResource(car);
     }
 
@@ -85,7 +87,7 @@ class CarController {
      * @return response that the new vehicle was added to the system
      * @throws URISyntaxException if the request contains invalid fields or syntax
      */
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Save a car to the inventory.",
             notes = "Save a car. ")
     ResponseEntity<?> post(@ApiParam(value="The Car to save.",  required = true)
@@ -106,7 +108,7 @@ class CarController {
      * @param car The updated information about the related vehicle.
      * @return response that the vehicle was updated in the system
      */
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Update a car by id in the current inventory.",
             notes = "The id is generated with the vehicle during POST request.  Only vehicle details and location are mutible.")
 

@@ -1,24 +1,10 @@
 package com.udacity.vehicles.service;
 
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 public class ServiceUtil {
-
-    public static boolean pingURL(DiscoveryClient client, String service, String localUrl, int timeout) {
-        List<ServiceInstance> list = client.getInstances(service);
-        if (list != null && list.size() > 0) {
-            return true;
-        } else {
-            return pingURL(localUrl, timeout);
-        }
-    }
 
     /**
      * @Author BalusC - https://stackoverflow.com/users/157882/balusc
