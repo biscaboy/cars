@@ -73,6 +73,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  *      ModelMapper.org - Javadoc - http://modelmapper.org/javadoc/org/modelmapper
  *      Baeldung - Java Optional Class - https://www.baeldung.com/java-optional
  *      Terms of Service - Website Policies - https://www.websitepolicies.com/blog/sample-terms-service-template
+ *      @GetMapping annotation - Shubham S - https://knowledge.udacity.com/questions/345642
  *
  */
 @SpringBootApplication
