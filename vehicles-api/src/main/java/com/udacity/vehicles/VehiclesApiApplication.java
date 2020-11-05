@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -78,6 +79,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 @EnableJpaAuditing
 @EnableEurekaClient
 public class VehiclesApiApplication {
+
+    @Autowired
+    Environment env;
 
     @Autowired
     private DiscoveryClient discoveryClient;
@@ -147,6 +151,13 @@ public class VehiclesApiApplication {
 
         EurekaEndpoint endpoint = new EurekaEndpoint(discoveryClient, connectToEureka, serviceName, localEndpoint);
         return endpoint.lookup();
+    }
+
+
+    @Bean(name="vehicleServerUrl")
+    public String vehicleServerUrl (@Value("${server.hostname:localhost}") String host,
+                                    @Value("${server.port:8080}") String port) {
+        return "http://" + host + ":" + port;
     }
 
 }
