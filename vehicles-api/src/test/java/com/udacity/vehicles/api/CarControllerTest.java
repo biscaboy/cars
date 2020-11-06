@@ -2,9 +2,7 @@ package com.udacity.vehicles.api;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,6 +18,7 @@ import java.net.URI;
 import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
@@ -72,6 +71,7 @@ public class CarControllerTest {
      * @throws Exception when car creation fails in the system
      */
     @Test
+    @DisplayName("Create a car (via POST)")
     public void createCar() throws Exception {
         Car car = getCar();
         mvc.perform(
@@ -89,6 +89,7 @@ public class CarControllerTest {
      * @throws Exception if the read operation of the vehicle list fails
      */
     @Test
+    @DisplayName("Display all cars in the inventory (via GET)")
     public void listCars() throws Exception {
         /*
          * DONE! : Add a test to check that the `get` method works by calling
@@ -107,6 +108,7 @@ public class CarControllerTest {
      * @throws Exception if the read operation for a single car fails
      */
     @Test
+    @DisplayName("Find a car by ID (via GET)")
     public void findCar() throws Exception {
         /*
          * DONE! : Add a test to check that the `get` method works by calling
@@ -122,11 +124,26 @@ public class CarControllerTest {
                 .andExpect(jsonPath("_links.self.href").value("http://localhost/cars/1"));;
     }
 
+    @Test
+    @DisplayName("Update a car (via PUT)")
+    public void updateCar() throws Exception {
+        Car car = getCar();
+        mvc.perform(
+                put(new URI("/cars/1"))
+                        .content(json.write(car).getJson())
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self.href").isNotEmpty())
+                .andExpect(jsonPath("_links.self.href").value("http://localhost/cars/1"));
+    }
+
     /**
      * Tests the deletion of a single car by ID.
      * @throws Exception if the delete operation of a vehicle fails
      */
     @Test
+    @DisplayName("Delete a car (via DELETE)")
     public void deleteCar() throws Exception {
         /*
          * DONE! : Add a test to check whether a vehicle is appropriately deleted

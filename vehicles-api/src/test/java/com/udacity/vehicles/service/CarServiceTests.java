@@ -134,4 +134,20 @@ public class CarServiceTests {
     public void testFindCarFail() {
         assertThrows(CarNotFoundException.class, () -> { carService.findById(0L); });
     }
+
+    @Test
+    @DisplayName("Update a car")
+    public void testUpdateCar() {
+        Car saved = carService.save(chevy);
+        assertEquals(chevy.getDetails().getBody(), saved.getDetails().getBody());
+        assertEquals(chevy.getDetails().getMileage(), saved.getDetails().getMileage());
+
+        saved.setCondition(Condition.USED);
+        saved.getDetails().setMileage(Integer.valueOf(111111));
+
+        Car updated = carService.save(saved);
+        assertEquals(saved.getCondition(), updated.getCondition());
+        assertEquals(saved.getDetails().getMileage(), updated.getDetails().getMileage());
+
+    }
 }
