@@ -239,4 +239,18 @@ public class PricingServiceApplicationTests {
 				.andExpect(jsonPath("errors.[0].code").value("vehicle_id.not.unique"));
 	}
 
+	@Test
+	@DisplayName("Validate invalid vehicle id.")
+	public void testInvalidVehicleId() throws Exception {
+
+		int vehicleId = 900;
+
+		MockHttpServletRequestBuilder get = get("/prices/" + vehicleId)
+				.accept(MediaType.APPLICATION_JSON_UTF8)
+				.contentType(MediaType.APPLICATION_JSON_UTF8);
+		// Try to find the price
+		mockMvc.perform(get)
+				.andExpect(status().isNotFound());
+	}
+
 }
