@@ -8,7 +8,7 @@ longitude, will return a random address.
 Via shell it can be started using
 
 ```
-$ mvn clean package
+$ ./mvnw clean package
 ```
 
 ```
